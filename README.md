@@ -13,8 +13,7 @@
   * 如果将图边界1-2染色，内部节点3-4染色，则(1,3)子图的连通分支数赢等于(2,4)的连通分支树
 
 <br />
-<br />
-gi
+
 本项目主要有如下特性：
 
   * 使用Java Swing进行可视化绘图；外部使用红蓝染色，内部使用绿色和紫红色染色。
@@ -24,19 +23,20 @@ gi
   * 支持同构判断，每次变换后都会判断变换后的图片是否与某一个已经保存的图同构。
   * 支持快捷键操作（a: 添加；n: 变换；u: 撤销；s: 存档；l: 读档；c: 检查所有保存的图是否存在同构）
 
+<br />
 
 ### 编译运行
 
 请使用IntelliJ IDEA进行编译运行。请确保有Java 1.8的环境。
 
-`save/`: 存档文件夹  
-> `*.graph`&nbsp;&nbsp;&nbsp; 图的信息，可以读取  
-> `*.png`&nbsp;&nbsp;&nbsp; 对应图的png文件，可以直接查看  
+**save/**: 存档文件夹  
+> **\*.graph**&nbsp;&nbsp;&nbsp; 图的信息，可以读取 
+> **\*.png**&nbsp;&nbsp;&nbsp; 对应图的png文件，可以直接查看  
 
-`src/`: 源代码目录
-> `Graph.java`&nbsp;&nbsp;&nbsp; 本项目中图的数据结构  
-> `GraphIsomoriphism.java`&nbsp;&nbsp;&nbsp; 判断两张图是否同构  
-> `GraphMap`&nbsp;&nbsp;&nbsp; 以邻接矩阵形式存放的图  
-> `GraphPanel`&nbsp;&nbsp;&nbsp; 继承自`JPanel`，负责具体的图形绘制  
-> `Main.java`&nbsp;&nbsp;&nbsp; 主函数，负责文件处理，以及添加、变换、撤销等操作
+**src/**: 源代码目录
+> **Graph.java**&nbsp;&nbsp;&nbsp; 本项目中图的数据结构  
+> **GraphIsomoriphism.java**&nbsp;&nbsp;&nbsp; 判断两张图是否同构  
+> **GraphMap.java**&nbsp;&nbsp;&nbsp; 以邻接矩阵形式存放的图  
+> **GraphPanel.java**&nbsp;&nbsp;&nbsp; 继承自`JPanel`，负责具体的图形绘制  
+> **Main.java**&nbsp;&nbsp;&nbsp; 主函数，负责文件处理，以及添加、变换、撤销等操作
 
