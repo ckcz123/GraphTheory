@@ -35,7 +35,7 @@
 
 **src/**: 源代码目录
 > **Graph.java**&nbsp;&nbsp;&nbsp; 本项目中图的数据结构  
-> **GraphIsomoriphism.java**&nbsp;&nbsp;&nbsp; 判断两张图是否同构  
+> **GraphIsomorphism.java**&nbsp;&nbsp;&nbsp; 判断两张图是否同构  
 > **GraphMap.java**&nbsp;&nbsp;&nbsp; 以邻接矩阵形式存放的图  
 > **GraphPanel.java**&nbsp;&nbsp;&nbsp; 继承自`JPanel`，负责具体的图形绘制  
 > **Main.java**&nbsp;&nbsp;&nbsp; 主函数，负责文件处理，以及添加、变换、撤销等操作
