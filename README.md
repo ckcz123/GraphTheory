@@ -30,7 +30,7 @@
 请使用IntelliJ IDEA进行编译运行。请确保有Java 1.8的环境。
 
 **save/**: 存档文件夹  
-> **\*.graph**&nbsp;&nbsp;&nbsp; 图的信息，可以读取 
+> **\*.graph**&nbsp;&nbsp;&nbsp; 图的信息，可以读取  
 > **\*.png**&nbsp;&nbsp;&nbsp; 对应图的png文件，可以直接查看  
 
 **src/**: 源代码目录
