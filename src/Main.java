@@ -206,15 +206,7 @@ public class Main {
                 if (u==-1) {draw("Unable to generate the next graph.");return;}
                 x2=u%12;
                 y2=u/12;
-                Graph tmp=new Graph(graph);
-                if (exchange(tmp, x1, y1) && exchange(tmp, x2, y2) && tmp.valid()) {
-                    tmp.setLast(x1, y1, x2, y2);
-                    stack.addFirst(tmp);
-                    String string=findIsomorphism(tmp);
-                    if (string!=null) draw("Isomorphic with file: "+string);
-                    else draw();
-                    return;
-                }
+                if (testGraph(new Graph(graph), x1, y1, x2, y2)) return;
             }
         }
         else {
@@ -226,18 +218,22 @@ public class Main {
                 if (v==-1) {draw("Unable to generate the next graph.");return;}
                 x2=v%12;
                 y2=v/12;
-                Graph tmp=new Graph(graph);
-                if (exchange(tmp, x1, y1) && exchange(tmp, x2, y2) && tmp.valid()) {
-                    tmp.setLast(x1, y1, x2, y2);
-                    stack.addFirst(tmp);
-                    String string=findIsomorphism(tmp);
-                    if (string!=null) draw("Isomorphic with file: "+string);
-                    else draw();
-                    return;
-                }
+                if (testGraph(new Graph(graph), x1, y1, x2, y2)) return;
             }
         }
         draw("Unable to generate the next graph.");
+    }
+
+    private boolean testGraph(Graph tmp, int x1, int y1, int x2, int y2) {
+        if (exchange(tmp, x1, y1) && exchange(tmp, x2, y2) && tmp.valid()) {
+            tmp.setLast(x1, y1, x2, y2);
+            stack.addFirst(tmp);
+            String string=findIsomorphism(tmp);
+            if (string!=null) draw("Isomorphic with file: "+string);
+            else draw();
+            return true;
+        }
+        return false;
     }
 
     private boolean exchange(Graph graph, int x, int y) {
