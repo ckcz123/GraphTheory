@@ -21,6 +21,9 @@ public class GraphPanel extends JPanel {
     private static int RADIUS = 5;
     private int BASE_X = 80;
     private int BASE_Y = 300;
+    private boolean color=true;
+
+    public void setColor(boolean c) {color=c;}
 
     public void setGraph(Graph graph) {
         this.graph=graph;
@@ -45,9 +48,11 @@ public class GraphPanel extends JPanel {
     private void drawPoint(Graphics2D g2d, Point point, Color color, int r, int id, int dx, int dy) {
         g2d.setColor(color);
         g2d.fillOval(point.x-r, point.y-r, 2*r, 2*r);
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.BOLD, 12));
-        g2d.drawString(""+id, point.x+dx, point.y+dy);
+        if (this.color) {
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(new Font("Arial", Font.BOLD, 12));
+            g2d.drawString(""+id, point.x+dx, point.y+dy);
+        }
     }
 
     private void drawLine(Graphics2D g2d, Point p1, Point p2) {
@@ -59,6 +64,8 @@ public class GraphPanel extends JPanel {
         super.paint(g);
         if (graph==null) return;
 
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());
         Graphics2D g2d=(Graphics2D)g;
         for (int i=0;i<12;i++) {
             int dx=0, dy=0;
@@ -66,14 +73,20 @@ public class GraphPanel extends JPanel {
             else if (i==5||i==6) dx=2*RADIUS;
             else if (i>=1 && i<=4) dy=-2*RADIUS;
             else dy=4*RADIUS;
-            drawPoint(g2d, borders[i], i%2==0?Color.RED:Color.BLUE, i==graph.lastx1||i==graph.lastx2?2*RADIUS:RADIUS, i, dx, dy);
+            if (color)
+                drawPoint(g2d, borders[i], i%2==0?Color.RED:Color.BLUE, i==graph.lastx1||i==graph.lastx2?2*RADIUS:RADIUS, i, dx, dy);
+            else
+                drawPoint(g2d, borders[i], Color.BLACK, RADIUS, i, dx, dy);
         }
         for (int i=0;i<graph.n;i++) {
             int dx, dy=-2*RADIUS;
             if (i<graph.n/2) dx=-4*RADIUS;
             else dx=2*RADIUS;
-            drawPoint(g2d, cores[i], i%2==0?Color.GREEN:Color.MAGENTA, i==graph.lasty1-1||i==graph.lasty2-1?2*RADIUS:RADIUS,
-                    i+1, dx, dy);
+            if (color)
+                drawPoint(g2d, cores[i], i%2==0?Color.GREEN:Color.MAGENTA, i==graph.lasty1-1||i==graph.lasty2-1?2*RADIUS:RADIUS,
+                        i+1, dx, dy);
+            else
+                drawPoint(g2d, cores[i], Color.BLACK, RADIUS, i+1, dx, dy);
         }
         for (int i=0;i<12;i++) {
             for (int j: graph.links[i]) {

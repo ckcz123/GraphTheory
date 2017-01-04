@@ -1,3 +1,4 @@
+import java.awt.CheckboxMenuItem;
 import java.awt.Graphics2D;
 import java.awt.Menu;
 import java.awt.MenuBar;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -30,6 +32,7 @@ public class Main {
     JFrame jframe;
     GraphPanel graphPanel;
     Random random;
+    public boolean color=true;
 
     File dir=null;
 
@@ -52,16 +55,19 @@ public class Main {
         jframe.add(graphPanel);
 
         stack.add(Graph.getDefaultGraph());
-
+        graphPanel.setColor(color);
         draw();
     }
 
     private void addMenu() {
         MenuBar menuBar=new MenuBar();
         Menu fileMenu=new Menu("File");
+        String cs="Color";
+        if (color) cs+=" (√)";
+        fileMenu.add(new MenuItem(cs)).addActionListener(e->setColor());
         fileMenu.add(new MenuItem("Save (s)")).addActionListener(e->save());
         fileMenu.add(new MenuItem("Load (l)")).addActionListener(e->load());
-        fileMenu.add(new MenuItem("Check isomorphism (c)")).addActionListener(e->checkIsomorphism());
+        fileMenu.add(new MenuItem("Check (c)")).addActionListener(e->checkIsomorphism());
         fileMenu.add(new MenuItem("Exit (e)")).addActionListener(e->exit());
         menuBar.add(fileMenu);
 
@@ -94,11 +100,18 @@ public class Main {
 
     public void draw(String string) {
         if (stack.isEmpty()) return;
-        if (stack.size()>=1000) stack.removeLast();
+        while (stack.size()>=1000) stack.removeLast();
         Graph graph=stack.peek();
         graphPanel.setGraph(graph);
         graphPanel.setString(string);
         graphPanel.repaint();
+    }
+
+    private void setColor() {
+        color=!color;
+        addMenu();
+        graphPanel.setColor(color);
+        draw(graphPanel.getString());
     }
 
     private void save() {
@@ -110,7 +123,7 @@ public class Main {
         }
         String s=findIsomorphism(graph);
         if (s!=null) {
-            if (JOptionPane.showConfirmDialog(jframe, "Isomorphism with "+s+", confirm to save?", "Warning", JOptionPane.YES_NO_OPTION)
+            if (JOptionPane.showConfirmDialog(jframe, "Isomorphic with "+s+", confirm to save?", "Warning", JOptionPane.YES_NO_OPTION)
                     ==JOptionPane.NO_OPTION) return;
         }
         s=graph.toString();
@@ -191,7 +204,12 @@ public class Main {
         draw("Add a new point.");
     }
 
-    private void next() {
+    private void next(int times) {
+        if (times>=1000) {
+            for (int i=0;i<998;i++) stack.pop();
+            draw("Unable to generate the next graph without isomorphism.");
+            return;
+        }
         Graph graph=new Graph(stack.peek());
 
         int x1=-1, y1=-1, x2=-1, y2=-1;
@@ -201,7 +219,7 @@ public class Main {
             x1=5;
             y1=graph.n-1;
 
-            for (int i=0;i<500;i++) {
+            for (int i=0;i<1000;i++) {
                 int u = randomGenerate(graph, x1, y1);
                 if (u==-1) {draw("Unable to generate the next graph.");return;}
                 x2=u%12;
@@ -211,7 +229,10 @@ public class Main {
                     tmp.setLast(x1, y1, x2, y2);
                     stack.addFirst(tmp);
                     String string=findIsomorphism(tmp);
-                    if (string!=null) draw("Isomorphic with file: "+string);
+                    if (string!=null) {
+                        next(times+1);
+                        //draw("Isomorphic with file: "+string);
+                    }
                     else draw();
                     return;
                 }
@@ -228,16 +249,26 @@ public class Main {
                 y2=v/12;
                 Graph tmp=new Graph(graph);
                 if (exchange(tmp, x1, y1) && exchange(tmp, x2, y2) && tmp.valid()) {
+                    //String string=findIsomorphism(tmp);
+                    //if (string!=null) continue;
                     tmp.setLast(x1, y1, x2, y2);
                     stack.addFirst(tmp);
                     String string=findIsomorphism(tmp);
-                    if (string!=null) draw("Isomorphic with file: "+string);
+                    if (string!=null) {
+                        next(times+1);
+//                      draw("Isomorphic with file: " + string);
+                    }
                     else draw();
+                    //draw();
                     return;
                 }
             }
         }
         draw("Unable to generate the next graph.");
+    }
+
+    private void next() {
+        next(0);
     }
 
     private boolean exchange(Graph graph, int x, int y) {
